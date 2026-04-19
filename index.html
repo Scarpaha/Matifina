@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Matifina · Catálogo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;700&display=swap');
+    :root { --m-crema: #F8F1E9; --m-marron: #5C4638; --m-verde: #9CAF88; --m-oro: #C9A66B; }
+    body { background-color: var(--m-crema); color: var(--m-marron); font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
+    .serif { font-family: 'Playfair Display', serif; }
+    .sticky-header { position: sticky; top: 0; z-index: 50; background: var(--m-crema); box-shadow: 0 2px 12px rgba(0,0,0,0.04); padding: 12px 0 0; }
+    .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; max-width: 1200px; margin: 0 auto; }
+    @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+    .card { background: white; border-radius: 20px; padding: 14px 12px; border: 1px solid rgba(201, 166, 107, 0.3); display: flex; flex-direction: column; box-shadow: 0 6px 12px -6px rgba(92,70,56,0.08); }
+    .img-box { width: 100%; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; border: 1px solid var(--m-oro); margin-bottom: 10px; background: #fdfaf7; }
+    .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cat-btn { border: 1px solid var(--m-oro); padding: 7px 18px; border-radius: 40px; font-size: 12px; white-space: nowrap; background: white; color: var(--m-marron); font-weight: 500; transition: all 0.15s; }
+    .cat-btn.active { background: var(--m-verde); color: white; border-color: var(--m-verde); }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .btn-primary { background: var(--m-marron); color: white; border: none; font-weight: 700; transition: all 0.15s; }
+    .btn-primary:disabled { background: #b7a99e; opacity: 0.6; pointer-events: none; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--m-verde); color: var(--m-marron); font-weight: 600; }
+    .cart-bar { background: var(--m-marron); color: white; border-radius: 60px; padding: 10px 22px; display: flex; align-items: center; justify-content: space-between; margin: 8px 16px 0; }
+    .qty-selector { display: flex; align-items: center; justify-content: space-between; gap: 4px; background: #f5efe8; border-radius: 40px; padding: 2px; border: 1px solid #ddd2c6; }
+    .qty-btn { background: white; border: none; width: 32px; height: 32px; border-radius: 40px; font-size: 18px; font-weight: bold; color: var(--m-marron); box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer; }
+    .qty-input { width: 50px; text-align: center; font-weight: 600; border: none; background: transparent; font-size: 14px; color: var(--m-marron); outline: none; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER STICKY -->
+<div class="sticky-header">
+  <!-- Logo: Isotipo + MatiFina en itálica -->
+  <div class="flex items-center justify-center gap-2 px-4">
+    <img src="https://drive.google.com/thumbnail?id=1Gv-4qOhhrQTFj-sUsPhvI58kzSsnFC2c&sz=w120" 
+         class="h-12 w-auto" alt="Isotipo Matifina">
+    <span class="serif italic text-3xl tracking-wide text-[#5C4638] font-bold">MatiFina</span>
+  </div>
+  <p class="serif italic text-xs opacity-50 text-center -mt-1 tracking-wide">Souvenirs con alma</p>
+
+  <!-- Barra de carrito (aparece con items) -->
+  <div id="cartSummary" class="hidden cart-bar max-w-3xl mx-auto">
+    <div class="flex items-center gap-3">
+      <span class="text-xl leading-5">🛒</span>
+      <span id="cartCountDisplay" class="text-xs font-bold uppercase tracking-wider bg-white/20 px-3 py-1 rounded-full">0</span>
+    </div>
+    <button onclick="sendCartOrder()" class="bg-[#9CAF88] hover:bg-[#7e9a6b] text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-sm">
+      Enviar pedido ✨
+    </button>
+  </div>
+
+  <!-- Categorías scrollable -->
+  <div id="catContainer" class="flex gap-2 overflow-x-auto px-4 pt-4 pb-3 no-scrollbar"></div>
+</div>
+
+<!-- Grid de productos -->
+<main>
+  <div id="grid" class="product-grid">
+    <p class="col-span-2 text-center py-24 opacity-50 text-sm serif">Cargando productos...</p>
+  </div>
+</main>
+
+<script>
+  (function(){
+    "use strict";
+
+    // ---------- CONFIGURACIÓN ----------
+    const MAPPING = { id: 0, tipo: 1, nombre: 2, stock: 3, precio: 4, imagen: 5 };
+    const CONFIG = {
+      csv: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQRWT_CIR-4fhiVRjCaOJephQGv7wvi7Gnnhs9EByWd5GToeJNmyuV-wMT00oIBzyeSUOeUZlSe8qMy/pub?gid=0&single=true&output=csv',
+      ws: '56933837626',
+      defImg: 'https://drive.google.com/thumbnail?id=1usWdFRDNM4ArTDFqmvAONmKU674VBou0&sz=w500'
+    };
+
+    // Estado
+    let inventory = [];
+    let cart = [];
+    let currentCategory = "TODOS";
+
+    // ---------- UTILIDADES ----------
+    function fixDriveUrl(url) {
+      if (!url || url.length < 10) return CONFIG.defImg;
+      const match = url.match(/(?:id=|d\/|file\/d\/)([\w-]{25,})/);
+      return match ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800` : CONFIG.defImg;
+    }
+    function cleanNumber(str) { return parseInt(String(str).replace(/[^0-9]/g, '')) || 0; }
+
+    function parseCSV(text) {
+      const rows = [];
+      const lines = text.split(/\r?\n/);
+      const pattern = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+      lines.forEach(line => {
+        if (!line.trim()) return;
+        const cols = line.split(pattern).map(c => c.trim().replace(/^"|"$/g, ''));
+        rows.push(cols);
+      });
+      return rows;
+    }
+
+    // ---------- RENDERIZADO ----------
+    function renderCategories() {
+      const types = ["TODOS", ...new Set(inventory.map(p => p.type).filter(Boolean))];
+      document.getElementById('catContainer').innerHTML = types.map(t => `
+        <button onclick="setCategory('${t.replace(/'/g, "\\'")}')" class="cat-btn ${currentCategory === t ? 'active' : ''}">${t}</button>
+      `).join('');
+    }
+
+    // Actualiza el estado del botón "Añadir" según cantidad vs stock
+    function updateAddButtonState(productId, currentQty, stock) {
+      const addBtn = document.getElementById(`add-btn-${productId}`);
+      if (addBtn) {
+        if (currentQty > stock || stock <= 0) {
+          addBtn.disabled = true;
+        } else {
+          addBtn.disabled = false;
+        }
+      }
+    }
+
+    // Control de cantidad: incrementar / decrementar
+    window.changeQty = function(productId, delta) {
+      const input = document.getElementById(`qty-${productId}`);
+      const product = inventory.find(p => p.id === productId);
+      if (!input || !product) return;
+      let val = parseInt(input.value, 10);
+      if (isNaN(val)) val = 1;
+      val = Math.max(1, val + delta);
+      input.value = val;
+      updateAddButtonState(productId, val, product.stock);
+    };
+
+    // Cuando el usuario escribe manualmente
+    window.handleQtyInput = function(productId) {
+      const input = document.getElementById(`qty-${productId}`);
+      const product = inventory.find(p => p.id === productId);
+      if (!input || !product) return;
+      let val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 1) val = 1;
+      input.value = val;
+      updateAddButtonState(productId, val, product.stock);
+    };
+
+    function renderProducts() {
+      const grid = document.getElementById('grid');
+      const filtered = currentCategory === "TODOS" ? inventory : inventory.filter(p => p.type === currentCategory);
+      if (filtered.length === 0) {
+        grid.innerHTML = `<p class="col-span-2 text-center py-24 opacity-40 text-sm serif">No hay productos en esta categoría</p>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const stock = p.stock;
+        // ID único para elementos
+        return `
+        <div class="card">
+          <div class="img-box">
+            <img src="${p.img}" loading="lazy" onerror="this.src='${CONFIG.defImg}'" alt="${p.name}">
+          </div>
+          <p class="text-[9px] uppercase tracking-wider text-[#9CAF88] font-bold">${p.type}</p>
+          <h3 class="serif text-sm font-bold leading-tight my-1 line-clamp-2">${p.name}</h3>
+          <div class="flex items-baseline justify-between mb-2">
+            <span class="font-bold text-base">$${p.price.toLocaleString('es-CL')}</span>
+            <span class="text-[9px] opacity-50">Stock: ${stock}</span>
+          </div>
+          
+          <!-- Selector de cantidad con - / + -->
+          <div class="qty-selector mb-3">
+            <button class="qty-btn" onclick="changeQty('${p.id}', -1)">–</button>
+            <input type="number" id="qty-${p.id}" min="1" value="1" 
+                   oninput="handleQtyInput('${p.id}')" 
+                   class="qty-input" style="-moz-appearance: textfield;">
+            <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
+          </div>
+          
+          <!-- Botones de acción -->
+          <div class="space-y-2">
+            <button id="add-btn-${p.id}" onclick="addToCart('${p.id}')" 
+                    class="w-full btn-primary py-2.5 rounded-full text-[11px] uppercase tracking-wider"
+                    ${(stock <= 0) ? 'disabled' : ''}>
+              ✨ Añadir al carro
+            </button>
+            <button onclick="specialOrder('${p.id}')" 
+                    class="w-full btn-outline py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider hover:bg-[#9CAF88]/10 transition">
+              📦 Mandar a hacer
+            </button>
+          </div>
+        </div>
+        `;
+      }).join('');
+
+      // Inicializar estado de botones "Añadir" (por si stock es 0)
+      filtered.forEach(p => {
+        const qtyInput = document.getElementById(`qty-${p.id}`);
+        if (qtyInput) {
+          const val = parseInt(qtyInput.value, 10) || 1;
+          updateAddButtonState(p.id, val, p.stock);
+        }
+      });
+    }
+
+    function updateCartBar() {
+      const total = cart.reduce((sum, i) => sum + i.q, 0);
+      const bar = document.getElementById('cartSummary');
+      const span = document.getElementById('cartCountDisplay');
+      if (total === 0) bar.classList.add('hidden');
+      else {
+        bar.classList.remove('hidden');
+        span.textContent = `${total} ${total === 1 ? 'item' : 'items'}`;
+      }
+    }
+
+    // ---------- ACCIONES ----------
+    window.addToCart = function(productId) {
+      const product = inventory.find(p => p.id === productId);
+      if (!product) return;
+      const qtyInput = document.getElementById(`qty-${productId}`);
+      let qty = qtyInput ? parseInt(qtyInput.value, 10) : 1;
+      if (isNaN(qty) || qty < 1) qty = 1;
+      
+      // Validación extra: no añadir más que el stock
+      if (qty > product.stock) {
+        alert(`Solo hay ${product.stock} unidades disponibles.`);
+        return;
+      }
+      if (product.stock <= 0) return;
+
+      const existing = cart.find(i => i.id === productId);
+      if (existing) {
+        existing.q += qty;
+      } else {
+        cart.push({ id: product.id, name: product.name, price: product.price, q: qty });
+      }
+      updateCartBar();
+    };
+
+    window.sendCartOrder = function() {
+      if (cart.length === 0) return;
+      const items = cart.map(i => `${i.q} x ${i.id} ${i.name}`).join('\n');
+      const msg = `Hola Matifina. Deseo pedir: ✨\n${items}\nQuedo atento a la disponibilidad. 🕯️`;
+      window.open(`https://wa.me/${CONFIG.ws}?text=${encodeURIComponent(msg)}`, '_blank');
+    };
+
+    window.specialOrder = function(productId) {
+      const product = inventory.find(p => p.id === productId);
+      if (!product) return;
+      const qtyInput = document.getElementById(`qty-${productId}`);
+      let qty = qtyInput ? parseInt(qtyInput.value, 10) : 1;
+      if (isNaN(qty) || qty < 1) qty = 1;
+      
+      // Mensaje con saltos de línea
+      const msg = `Hola. Me interesa mandar a hacer este producto:\n📦 Item: ${product.name}\nID: ${product.id}\nCantidad estimada: ${qty}\nMe gustaria coordinar el precio por esta cantidad. ✨`;
+      window.open(`https://wa.me/${CONFIG.ws}?text=${encodeURIComponent(msg)}`, '_blank');
+    };
+
+    window.setCategory = function(cat) {
+      currentCategory = cat;
+      renderCategories();
+      renderProducts();
+    };
+
+    // ---------- CARGA INICIAL ----------
+    async function loadData() {
+      try {
+        const res = await fetch(CONFIG.csv + '&t=' + Date.now());
+        const text = await res.text();
+        const rows = parseCSV(text).slice(1);
+        inventory = rows.map((cols, idx) => {
+          if (cols.length < 5) return null;
+          return {
+            id: cols[MAPPING.id] || `PROD-${idx}`,
+            type: cols[MAPPING.tipo] || 'Otros',
+            name: cols[MAPPING.nombre] || 'Sin nombre',
+            stock: cleanNumber(cols[MAPPING.stock] || '0'),
+            price: cleanNumber(cols[MAPPING.precio] || '0'),
+            img: fixDriveUrl(cols[MAPPING.imagen])
+          };
+        }).filter(p => p !== null && p.name);
+        
+        renderCategories();
+        renderProducts();
+        updateCartBar();
+      } catch (e) {
+        console.error(e);
+        document.getElementById('grid').innerHTML = `<p class="col-span-2 text-center py-20 text-sm opacity-60">Error al cargar. Revisa que la hoja esté publicada.</p>`;
+      }
+    }
+
+    window.onload = loadData;
+  })();
+</script>
+
+<!-- Ajustes finales -->
+<style>
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  html { scroll-padding-top: 180px; }
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .qty-input { -moz-appearance: textfield; }
+</style>
+</body>
+</html>
