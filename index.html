@@ -172,6 +172,13 @@
       return rows;
     }
 
+    // ---------- DETECTAR CATEGORÍA DESDE URL ----------
+    function getCategoryFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const catParam = params.get('cat') || params.get('categoria'); // soporta ambos
+      return catParam ? decodeURIComponent(catParam).trim() : null;
+    }
+
     // ---------- RENDERIZADO ----------
     function renderCategories() {
       const types = ["TODOS", ...new Set(inventory.map(p => p.type).filter(Boolean))];
@@ -423,6 +430,11 @@
       currentCategory = cat;
       renderCategories();
       renderProducts();
+      
+      // Opcional: actualizar URL sin recargar (para compartir)
+      const url = new URL(window.location);
+      url.searchParams.set('cat', cat);
+      window.history.replaceState({}, '', url);
     };
 
     // ---------- CARGA INICIAL ----------
@@ -442,6 +454,19 @@
             img: fixDriveUrl(cols[MAPPING.imagen])
           };
         }).filter(p => p !== null && p.name);
+        
+        // Aplicar categoría desde URL si existe
+        const urlCat = getCategoryFromUrl();
+        if (urlCat) {
+          // Verificar si existe exactamente esa categoría (case‑sensitive)
+          const categoriasDisponibles = ["TODOS", ...new Set(inventory.map(p => p.type))];
+          if (categoriasDisponibles.includes(urlCat)) {
+            currentCategory = urlCat;
+          } else {
+            // Si no coincide, podríamos ignorar o dejar TODOS
+            console.warn(`Categoría "${urlCat}" no encontrada, mostrando TODOS.`);
+          }
+        }
         
         renderCategories();
         renderProducts();
