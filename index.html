@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Matifina · Catálogo & Presupuestos</title>
   
-  <link rel="icon" href="https://drive.google.com/thumbnail?id=1IKZk0fGoPdwr0DkUEUJabYK2me-Ofx5W&sz=w32" type="image/png">
-  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1IKZk0fGoPdwr0DkUEUJabYK2me-Ofx5W&sz=w180">
+  <link rel="icon" href="https://drive.google.com/thumbnail?id=1lMRrDoeEuVefuD9BCPNbOi0QUyWfaDyX&sz=w64" type="image/png">
+  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1lMRrDoeEuVefuD9BCPNbOi0QUyWfaDyX&sz=w180">
   
   <meta property="og:title" content="Matifina · Souvenirs con alma">
   <meta property="og:description" content="Catálogo de productos únicos. Velas, decoración y detalles hechos a mano.">
@@ -18,71 +18,86 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;500;600;700&display=swap');
-    :root { --m-crema: #F8F1E9; --m-marron: #5C4638; --m-verde: #9CAF88; --m-oro: #C9A66B; --m-rojo: #c04242; }
+    /* 
+      Paleta principal:
+      #A66A42 (terracota) · #F3EAE1 (crema) · #6B7A46 (verde oliva) · #FAF7F2 (blanco cálido)
+      Complementarios:
+      #3D2415 (marrón profundo para texto) · #C28B5E (caramelo) · #B5453A (rojo terroso) · #E8DDD0 (borde suave)
+    */
+    :root { 
+      --m-crema: #F3EAE1;
+      --m-blanco: #FAF7F2;
+      --m-marron: #A66A42;
+      --m-texto: #3D2415;
+      --m-verde: #6B7A46;
+      --m-oro: #C28B5E;
+      --m-rojo: #B5453A;
+      --m-borde: #E8DDD0;
+    }
     * { -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--m-crema); color: var(--m-marron); font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--m-crema); color: var(--m-texto); font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
     .serif { font-family: 'Playfair Display', serif; }
-    .sticky-header { position: sticky; top: 0; z-index: 40; background: var(--m-crema); box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 12px 0 0; backdrop-filter: blur(8px); background: rgba(248,241,233,0.95); }
+    .sticky-header { position: sticky; top: 0; z-index: 40; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 12px 0 0; backdrop-filter: blur(8px); background: rgba(243,234,225,0.95); }
     .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; max-width: 1200px; margin: 0 auto; }
     @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
-    .card { background: white; border-radius: 20px; padding: 14px 12px; border: 1px solid rgba(201, 166, 107, 0.3); display: flex; flex-direction: column; box-shadow: 0 6px 12px -6px rgba(92,70,56,0.08); transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease; }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 12px 20px -8px rgba(92,70,56,0.15); }
-    .img-box { width: 100%; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; border: 1px solid var(--m-oro); margin-bottom: 10px; background: #fdfaf7; position: relative; }
+    .card { background: var(--m-blanco); border-radius: 20px; padding: 14px 12px; border: 1px solid rgba(194,139,94, 0.3); display: flex; flex-direction: column; box-shadow: 0 6px 12px -6px rgba(61,36,21,0.08); transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 12px 20px -8px rgba(61,36,21,0.15); }
+    .img-box { width: 100%; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; border: 1px solid var(--m-oro); margin-bottom: 10px; background: var(--m-blanco); position: relative; }
     .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
     .card:hover .img-box img { transform: scale(1.03); }
-    .img-box .placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #fdfaf7 0%, #f5efe8 100%); color: var(--m-oro); font-size: 32px; }
+    .img-box .placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--m-blanco) 0%, var(--m-crema) 100%); color: var(--m-oro); font-size: 32px; }
     .fav-btn { position: absolute; top: 6px; right: 6px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; transition: all 0.2s ease; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
     .fav-btn:hover { transform: scale(1.15); }
-    .fav-btn.active { background: #ffe0e0; }
+    .fav-btn.active { background: #F8E0D2; }
     .share-btn { position: absolute; top: 6px; left: 6px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; transition: all 0.2s ease; font-size: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
     .share-btn:hover { transform: scale(1.15); background: var(--m-verde); color: white; }
     .cat-btn { border: 1px solid var(--m-oro); padding: 7px 18px; border-radius: 40px; font-size: 12px; white-space: nowrap; background: white; color: var(--m-marron); font-weight: 500; transition: all 0.15s; cursor: pointer; }
-    .cat-btn:hover { background: #f5efe8; }
+    .cat-btn:hover { background: var(--m-crema); }
     .cat-btn:focus-visible { outline: 2px solid var(--m-verde); outline-offset: 2px; }
     .cat-btn.active { background: var(--m-verde); color: white; border-color: var(--m-verde); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .btn-primary { background: var(--m-marron); color: white; border: none; font-weight: 700; transition: all 0.15s; cursor: pointer; }
-    .btn-primary:hover:not(:disabled) { background: #4a372b; transform: translateY(-1px); }
-    .btn-primary:disabled { background: #b7a99e; opacity: 0.6; pointer-events: none; }
+    .btn-primary:hover:not(:disabled) { background: #8B5535; transform: translateY(-1px); }
+    .btn-primary:disabled { background: #C9B3A2; opacity: 0.6; pointer-events: none; }
     .btn-primary:focus-visible { outline: 2px solid var(--m-oro); outline-offset: 2px; }
     .btn-outline { background: transparent; border: 1.5px solid var(--m-verde); color: var(--m-marron); font-weight: 600; cursor: pointer; transition: all 0.15s; }
     .btn-outline:hover { background: var(--m-verde); color: white; }
     .btn-outline:focus-visible { outline: 2px solid var(--m-verde); outline-offset: 2px; }
     .cart-bar { background: var(--m-marron); color: white; border-radius: 60px; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; margin: 8px 16px 0; animation: slideUp 0.3s ease; }
     @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .qty-selector { display: flex; align-items: center; justify-content: space-between; gap: 4px; background: #f5efe8; border-radius: 40px; padding: 2px; border: 1px solid #ddd2c6; }
+    .qty-selector { display: flex; align-items: center; justify-content: space-between; gap: 4px; background: var(--m-crema); border-radius: 40px; padding: 2px; border: 1px solid var(--m-borde); }
     .qty-btn { background: white; border: none; width: 32px; height: 32px; border-radius: 40px; font-size: 18px; font-weight: bold; color: var(--m-marron); box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.15s; }
     .qty-btn:hover:not(:disabled) { background: var(--m-crema); }
     .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    .qty-input { width: 50px; text-align: center; font-weight: 600; border: none; background: transparent; font-size: 14px; color: var(--m-marron); outline: none; }
+    .qty-input { width: 50px; text-align: center; font-weight: 600; border: none; background: transparent; font-size: 14px; color: var(--m-texto); outline: none; }
     
     .mode-selector { display: flex; width: 100%; margin-top: 12px; }
-    .mode-tab { flex: 1; text-align: center; border: none; border-radius: 0; background: transparent; font-size: 14px; padding: 12px; font-weight: 600; color: var(--m-marron); border-bottom: 3px solid transparent; transition: all 0.15s; cursor: pointer; }
-    .mode-tab:hover { background: rgba(156,175,136,0.1); }
+    .mode-tab { flex: 1; text-align: center; border: none; border-radius: 0; background: transparent; font-size: 14px; padding: 12px; font-weight: 600; color: var(--m-texto); border-bottom: 3px solid transparent; transition: all 0.15s; cursor: pointer; }
+    .mode-tab:hover { background: rgba(107,122,70,0.1); }
     .mode-tab.active { background: var(--m-crema); border-bottom-color: var(--m-verde); }
     .mode-tab:focus-visible { outline: 2px solid var(--m-verde); outline-offset: -2px; }
     
     .quote-list { display: flex; flex-direction: column; gap: 16px; padding: 16px; max-width: 1000px; margin: 0 auto; }
-    .quote-card { display: grid; grid-template-columns: 100px 1fr; gap: 16px; background: white; border-radius: 20px; padding: 16px; border: 1px solid rgba(201, 166, 107, 0.3); box-shadow: 0 4px 8px -4px rgba(0,0,0,0.05); align-items: start; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .quote-card { display: grid; grid-template-columns: 100px 1fr; gap: 16px; background: var(--m-blanco); border-radius: 20px; padding: 16px; border: 1px solid rgba(194,139,94, 0.3); box-shadow: 0 4px 8px -4px rgba(0,0,0,0.05); align-items: start; transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .quote-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px -6px rgba(0,0,0,0.1); }
     .quote-img { width: 100%; aspect-ratio: 3/4; border-radius: 14px; overflow: hidden; border: 1px solid var(--m-oro); }
     .quote-img img { width: 100%; height: 100%; object-fit: cover; }
     .quote-info { display: flex; flex-direction: column; }
-    .scale-list { font-size: 12px; margin: 8px 0; color: #5C4638; }
-    .scale-item { display: inline-block; background: #F8F1E9; padding: 4px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 4px; border: 1px solid #C9A66B; }
+    .scale-list { font-size: 12px; margin: 8px 0; color: var(--m-texto); }
+    .scale-item { display: inline-block; background: var(--m-crema); padding: 4px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 4px; border: 1px solid var(--m-oro); }
     
-    .cart-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; justify-content: center; }
+    .cart-modal { display: none; position: fixed; inset: 0; background: rgba(61,36,21,0.45); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; justify-content: center; }
     .cart-modal.show { display: flex; }
     .cart-modal-content { background: white; width: 100%; max-width: 480px; max-height: 80vh; border-radius: 32px 32px 0 0; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); animation: modalSlideUp 0.3s ease; }
     @keyframes modalSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    .cart-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f0e4d8; animation: fadeIn 0.2s ease; }
+    .cart-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--m-borde); animation: fadeIn 0.2s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
     .cart-item-info { flex: 1; }
     .cart-item-title { font-weight: 700; font-size: 14px; }
     .cart-item-price { font-size: 12px; opacity: 0.7; }
     .cart-item-actions { display: flex; align-items: center; gap: 8px; }
-    .cart-item-qty { display: flex; align-items: center; gap: 4px; background: #f5efe8; border-radius: 30px; padding: 2px; }
+    .cart-item-qty { display: flex; align-items: center; gap: 4px; background: var(--m-crema); border-radius: 30px; padding: 2px; }
     .cart-qty-btn { background: white; border: none; width: 28px; height: 28px; border-radius: 30px; font-weight: bold; color: var(--m-marron); cursor: pointer; transition: all 0.15s; }
     .cart-qty-btn:hover { background: var(--m-crema); }
     .cart-qty-input { width: 35px; text-align: center; border: none; background: transparent; font-weight: 600; }
@@ -95,16 +110,16 @@
     
     /* Barra de búsqueda */
     .search-bar { position: relative; margin: 8px 16px 0; max-width: 1200px; margin-left: auto; margin-right: auto; }
-    .search-input { width: 100%; padding: 10px 16px 10px 40px; border: 1.5px solid #ddd2c6; border-radius: 40px; font-size: 14px; background: white; color: var(--m-marron); transition: all 0.2s; font-family: 'Montserrat', sans-serif; }
-    .search-input:focus { border-color: var(--m-verde); box-shadow: 0 0 0 3px rgba(156,175,136,0.2); outline: none; }
+    .search-input { width: 100%; padding: 10px 16px 10px 40px; border: 1.5px solid var(--m-borde); border-radius: 40px; font-size: 14px; background: white; color: var(--m-texto); transition: all 0.2s; font-family: 'Montserrat', sans-serif; }
+    .search-input:focus { border-color: var(--m-verde); box-shadow: 0 0 0 3px rgba(107,122,70,0.2); outline: none; }
     .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--m-oro); pointer-events: none; }
     .search-clear { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--m-marron); opacity: 0.5; cursor: pointer; font-size: 18px; display: none; padding: 4px; }
     .search-clear.visible { display: block; }
     
     /* Skeleton loader */
-    .skeleton { background: linear-gradient(90deg, #f0e4d8 25%, #f8f1e9 50%, #f0e4d8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 14px; }
+    .skeleton { background: linear-gradient(90deg, var(--m-crema) 25%, var(--m-blanco) 50%, var(--m-crema) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 14px; }
     @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-    .skeleton-card { background: white; border-radius: 20px; padding: 14px 12px; border: 1px solid rgba(201, 166, 107, 0.3); }
+    .skeleton-card { background: var(--m-blanco); border-radius: 20px; padding: 14px 12px; border: 1px solid rgba(194,139,94, 0.3); }
     .skeleton-img { width: 100%; aspect-ratio: 1/1; border-radius: 14px; margin-bottom: 10px; }
     .skeleton-text { height: 12px; border-radius: 6px; margin-bottom: 8px; }
     .skeleton-text-short { width: 60%; }
@@ -118,8 +133,8 @@
     @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-10px); } }
     
     /* Badge de stock bajo */
-    .stock-badge { position: absolute; bottom: 6px; left: 6px; background: rgba(192,66,66,0.9); color: white; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .stock-badge.low { background: rgba(201,166,107,0.9); }
+    .stock-badge { position: absolute; bottom: 6px; left: 6px; background: rgba(181,69,58,0.9); color: white; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stock-badge.low { background: rgba(194,139,94,0.9); }
     
     /* Empty state */
     .empty-state { text-align: center; padding: 40px 20px; }
@@ -132,11 +147,11 @@
     /* Scrollbar styling */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #ddd2c6; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: var(--m-borde); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--m-oro); }
 
     /* Lightbox */
-    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 300; align-items: center; justify-content: center; cursor: zoom-out; animation: lbFadeIn 0.25s ease; }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(61,36,21,0.9); z-index: 300; align-items: center; justify-content: center; cursor: zoom-out; animation: lbFadeIn 0.25s ease; }
     .lightbox.show { display: flex; }
     @keyframes lbFadeIn { from { opacity: 0; } to { opacity: 1; } }
     .lightbox img { max-width: 92vw; max-height: 90vh; border-radius: 16px; object-fit: contain; box-shadow: 0 20px 60px rgba(0,0,0,0.4); animation: lbZoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: zoom-out; }
@@ -168,16 +183,12 @@
     @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px) scale(0.95); } }
 
     /* Pulse animation for cart badge */
-    @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(201, 166, 107, 0.4); } 50% { box-shadow: 0 0 0 8px rgba(201, 166, 107, 0); } }
+    @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(194, 139, 94, 0.4); } 50% { box-shadow: 0 0 0 8px rgba(194, 139, 94, 0); } }
     .pulse { animation: pulse 2s infinite; }
 
     /* Image hover effect */
     .img-clickable { cursor: zoom-in; transition: transform 0.3s ease; }
     .img-clickable:hover { transform: scale(1.05); }
-
-    /* Skeleton pulse */
-    .skeleton { background: linear-gradient(90deg, #f0e4d8 25%, #f8f1e9 50%, #f0e4d8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 14px; }
-    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
     /* Smooth page transitions */
     .page-transition { animation: pageIn 0.35s ease both; }
@@ -204,11 +215,9 @@
 <body>
 
 <div class="sticky-header" role="banner">
-  <div class="flex items-center justify-center gap-2 px-4">
-    <img src="https://drive.google.com/thumbnail?id=1Gv-4qOhhrQTFj-sUsPhvI58kzSsnFC2c&sz=w120" class="h-12 w-auto" alt="Logo Matifina" loading="eager">
-    <span class="serif italic text-3xl tracking-wide text-[#5C4638] font-bold">MatiFina</span>
+  <div class="flex items-center justify-center gap-3 px-4">
+    <img src="https://drive.google.com/thumbnail?id=1nmuXDLwg5HEO0mfx4Iw60iV8TIZPgbD-&sz=w300" class="h-14 w-auto" alt="Logo Matifina" loading="eager">
   </div>
-  <p class="serif italic text-xs opacity-50 text-center -mt-1 tracking-wide">Souvenirs con alma</p>
 
   <div class="mode-selector" role="tablist" aria-label="Modo de navegación">
     <button id="tabCatalogo" class="mode-tab active" role="tab" aria-selected="true" onclick="switchMode('catalogo')" aria-controls="mainContent">Catálogo</button>
@@ -230,7 +239,7 @@
     </div>
     <div class="flex gap-2">
       <button onclick="openCartModal()" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider" aria-label="Ver carrito">Ver</button>
-      <button onclick="sendCartOrder()" class="bg-[#9CAF88] hover:bg-[#7e9a6b] text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-sm" aria-label="Enviar pedido por WhatsApp">Enviar</button>
+      <button onclick="sendCartOrder()" class="bg-[#6B7A46] hover:bg-[#556136] text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-sm" aria-label="Enviar pedido por WhatsApp">Enviar</button>
     </div>
   </div>
 
@@ -241,7 +250,7 @@
     </div>
     <div class="flex gap-2">
       <button onclick="openQuoteModal()" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider" aria-label="Ver presupuesto">Ver</button>
-      <button onclick="sendQuoteWhatsApp()" class="bg-[#5C4638] hover:bg-[#4a372b] text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-sm" aria-label="Enviar presupuesto por WhatsApp">Enviar</button>
+      <button onclick="sendQuoteWhatsApp()" class="bg-[#A66A42] hover:bg-[#8B5535] text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-sm" aria-label="Enviar presupuesto por WhatsApp">Enviar</button>
       <button onclick="printQuote()" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider" aria-label="Imprimir presupuesto">Imprimir</button>
     </div>
   </div>
@@ -264,29 +273,29 @@
 
 <div id="cartModal" class="cart-modal" onclick="if(event.target === this) closeCartModal()" role="dialog" aria-modal="true" aria-label="Carrito de compras">
   <div class="cart-modal-content">
-    <div class="p-5 border-b border-[#f0e4d8] flex justify-between items-center">
-      <h3 class="serif text-xl font-bold text-[#5C4638]">Tu pedido</h3>
-      <button onclick="closeCartModal()" class="text-[#5C4638] p-2 hover:bg-[#f0e4d8] rounded-full transition-colors" aria-label="Cerrar carrito">&times;</button>
+    <div class="p-5 border-b border-[#E8DDD0] flex justify-between items-center">
+      <h3 class="serif text-xl font-bold text-[#3D2415]">Tu pedido</h3>
+      <button onclick="closeCartModal()" class="text-[#3D2415] p-2 hover:bg-[#F3EAE1] rounded-full transition-colors" aria-label="Cerrar carrito">&times;</button>
     </div>
     <div id="cartModalItems" class="p-5 overflow-y-auto flex-1"></div>
-    <div class="p-5 border-t border-[#f0e4d8] bg-[#FDFAF7]">
+    <div class="p-5 border-t border-[#E8DDD0] bg-[#FAF7F2]">
       <div class="flex justify-between items-center mb-4">
-        <span class="font-bold text-[#5C4638]">Total</span>
-        <span id="modalTotalAmount" class="text-2xl font-black text-[#5C4638]">$0</span>
+        <span class="font-bold text-[#3D2415]">Total</span>
+        <span id="modalTotalAmount" class="text-2xl font-black text-[#3D2415]">$0</span>
       </div>
-      <button onclick="sendCartOrder()" class="w-full bg-[#9CAF88] hover:bg-[#7e9a6b] text-white py-4 rounded-full font-bold uppercase tracking-wider transition-all">Enviar a WhatsApp</button>
+      <button onclick="sendCartOrder()" class="w-full bg-[#6B7A46] hover:bg-[#556136] text-white py-4 rounded-full font-bold uppercase tracking-wider transition-all">Enviar a WhatsApp</button>
     </div>
   </div>
 </div>
 
 <div id="quoteModal" class="cart-modal" onclick="if(event.target === this) closeQuoteModal()" role="dialog" aria-modal="true" aria-label="Presupuesto">
   <div class="cart-modal-content">
-    <div class="p-5 border-b border-[#f0e4d8] flex justify-between items-center">
-      <h3 class="serif text-xl font-bold text-[#5C4638]">Tu presupuesto</h3>
-      <button onclick="closeQuoteModal()" class="text-[#5C4638] p-2 hover:bg-[#f0e4d8] rounded-full transition-colors" aria-label="Cerrar presupuesto">&times;</button>
+    <div class="p-5 border-b border-[#E8DDD0] flex justify-between items-center">
+      <h3 class="serif text-xl font-bold text-[#3D2415]">Tu presupuesto</h3>
+      <button onclick="closeQuoteModal()" class="text-[#3D2415] p-2 hover:bg-[#F3EAE1] rounded-full transition-colors" aria-label="Cerrar presupuesto">&times;</button>
     </div>
     <div id="quoteModalItems" class="p-5 overflow-y-auto flex-1"></div>
-    <div class="p-5 border-t border-[#f0e4d8] bg-[#FDFAF7]">
+    <div class="p-5 border-t border-[#E8DDD0] bg-[#FAF7F2]">
       <div class="space-y-2 mb-4">
         <div class="flex justify-between"><span>Subtotal productos:</span> <span id="quoteSubtotal">$0</span></div>
         <div class="flex justify-between"><span>Total Abono:</span> <span id="quoteAdvance">$0</span></div>
@@ -294,8 +303,8 @@
         <div class="flex justify-between font-bold text-lg"><span>Total:</span> <span id="quoteTotal">$0</span></div>
       </div>
       <div class="flex gap-2">
-        <button onclick="sendQuoteWhatsApp()" class="flex-1 bg-[#9CAF88] hover:bg-[#7e9a6b] text-white py-4 rounded-full font-bold uppercase tracking-wider transition-all">WhatsApp</button>
-        <button onclick="printQuote()" class="flex-1 bg-[#5C4638] hover:bg-[#4a372b] text-white py-4 rounded-full font-bold uppercase tracking-wider transition-all">Imprimir</button>
+        <button onclick="sendQuoteWhatsApp()" class="flex-1 bg-[#6B7A46] hover:bg-[#556136] text-white py-4 rounded-full font-bold uppercase tracking-wider transition-all">WhatsApp</button>
+        <button onclick="printQuote()" class="flex-1 bg-[#A66A42] hover:bg-[#8B5535] text-white py-4 rounded-full font-bold uppercase tracking-wider transition-all">Imprimir</button>
       </div>
     </div>
   </div>
@@ -312,11 +321,25 @@
 (function(){
   "use strict";
 
+  /* ============================================================================
+     ⚠️ REGLA IMPORTANTE — MENSAJES DE WHATSAPP ENVIADOS POR EL CLIENTE
+     ============================================================================
+     1) NUNCA incluir precios, subtotales, abonos ni totales en los mensajes
+        que el cliente envía por WhatsApp.
+        MOTIVO: el cliente puede editar el texto antes de enviarlo, por lo que
+        un precio mal editado podría generar confusión o conflictos.
+        Los precios se manejan solo de forma interna (modal, impresión, etc.).
+     2) Usar SIEMPRE "Espero su confirmación" en lugar de "Quedo atento"
+        (o cualquier variante con género: "atento"/"atenta").
+        MOTIVO: lenguaje neutro en género, ya que el cliente puede ser
+        masculino o femenino.
+     ============================================================================ */
+
   const SHEET_ID = '2PACX-1vQRWT_CIR-4fhiVRjCaOJephQGv7wvi7Gnnhs9EByWd5GToeJNmyuV-wMT00oIBzyeSUOeUZlSe8qMy';
   const CONFIG = {
     csvCatalogo: `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=0&single=true&output=csv`,
     csvPresupuestos: `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=2125137694&single=true&output=csv`,
-    ws: '56933837626',
+    ws: '56957961176',
     defImg: 'https://drive.google.com/thumbnail?id=1usWdRDNM4ArTDFqmvAONmKU674VBou0&sz=w500',
     STORAGE_CART: 'matifina_cart',
     STORAGE_QUOTE: 'matifina_quote',
@@ -652,7 +675,7 @@
           <button class="share-btn" onclick="event.stopPropagation();shareProduct({name:'${sanitize(p.name)}'})" aria-label="Compartir producto">↗</button>
           ${outOfStock ? '<span class="stock-badge">Agotado</span>' : lowStock ? `<span class="stock-badge low">¡Solo ${p.stock}!</span>` : ''}
         </div>
-        <p class="text-[9px] uppercase tracking-wider text-[#9CAF88] font-bold">${sanitize(p.type)}</p>
+        <p class="text-[9px] uppercase tracking-wider text-[#6B7A46] font-bold">${sanitize(p.type)}</p>
         <h3 class="serif text-sm font-bold leading-tight my-1 line-clamp-2">${sanitize(p.name)}</h3>
         <div class="flex items-baseline justify-between mb-2"><span class="font-bold text-base">${formatPrice(p.price)}</span><span class="text-[9px] opacity-50">${outOfStock ? 'Sin stock' : `Stock: ${p.stock}`}</span></div>
         <div class="qty-selector mb-3">
@@ -757,18 +780,27 @@
     document.body.style.overflow = ''; 
   };
 
+  /* ⚠️ REGLA: MENSAJE WHATSAPP PEDIDO — SIN PRECIOS, CIERRE NEUTRO
+     - NO incluir precios ni total (el cliente puede editarlo antes de enviar).
+     - Solo listar: cantidad + ID + nombre del producto.
+     - Cerrar con "Espero su confirmación" (neutro en género). */
   window.sendCartOrder = function() {
     if (!cart.length) return;
-    let total = 0;
-    const items = cart.map(i => { total += i.price * i.q; return `${i.q} x ${i.id} ${i.name} (${formatPrice(i.price * i.q)})`; }).join('\n');
-    window.open(`https://wa.me/${CONFIG.ws}?text=${encodeURIComponent(`Hola Matifina. Deseo pedir:\n\n${items}\n\nTotal: ${formatPrice(total)}\n\nQuedo atento. 🕯️`)}`, '_blank');
+    // Nota: NO se calcula ni se muestra el total aquí. Solo la lista de ítems.
+    const items = cart.map(i => `• ${i.q} x ${i.id} ${i.name}`).join('\n');
+    const msg = `Hola Matifina. Deseo pedir:\n\n${items}\n\nEspero su confirmación. 🕯️`;
+    window.open(`https://wa.me/${CONFIG.ws}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
+  /* ⚠️ REGLA: MENSAJE WHATSAPP "MANDAR A HACER" — SIN PRECIOS, CIERRE NEUTRO
+     - No se indican precios (solo se menciona que se coordinará precio y plazo).
+     - El cierre es una invitación neutra, sin "quedo atento/atenta". */
   window.specialOrderCatalog = function(pid) {
     const p = inventory.find(p => p.id === pid);
     if (!p) return;
     const qty = parseInt(document.getElementById(`qty-${pid}`).value) || 1;
-    window.open(`https://wa.me/${CONFIG.ws}?text=${encodeURIComponent(`Hola. Me interesa mandar a hacer este producto:\n\n📦 ${p.name}\nID: ${p.id}\nCantidad estimada: ${qty}\n\nMe gustaría coordinar precio y plazo. ✨`)}`, '_blank');
+    const msg = `Hola. Me interesa mandar a hacer este producto:\n\n📦 ${p.name}\nID: ${p.id}\nCantidad estimada: ${qty}\n\nEspero su confirmación para coordinar precio y plazo. ✨`;
+    window.open(`https://wa.me/${CONFIG.ws}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
   // ---------- PRESUPUESTOS ----------
@@ -870,7 +902,7 @@
       const grouped = {};
       filtered.forEach(p => { if (!grouped[p.titulo]) grouped[p.titulo] = []; grouped[p.titulo].push(p); });
       for (const titulo in grouped) {
-        html += `<div class="w-full"><h2 class="serif text-xl font-bold text-[#5C4638] border-b border-[#C9A66B] pb-1 mb-2">${sanitize(titulo)}</h2></div>`;
+        html += `<div class="w-full"><h2 class="serif text-xl font-bold text-[#3D2415] border-b border-[#C28B5E] pb-1 mb-2">${sanitize(titulo)}</h2></div>`;
         html += grouped[titulo].map(p => renderQuoteCard(p, cardIdx++)).join('');
       }
     } else {
@@ -913,7 +945,7 @@
         <div class="mt-2 grid grid-cols-2 gap-2 items-end">
           <div>
             <label class="text-xs block" for="qty-${p.id}">Cantidad deseada</label>
-            <div class="qty-selector" style="background: white; border: 1px solid #C9A66B;">
+            <div class="qty-selector" style="background: white; border: 1px solid #C28B5E;">
               <button class="qty-btn" onclick="changeQuoteQty('${sanitize(p.id)}', -1)" style="opacity:0.4;" aria-label="Reducir cantidad">–</button>
               <input type="number" id="qty-${p.id}" min="${minQty}" value="${minQty}" class="qty-input" oninput="handleQuoteQtyInput('${sanitize(p.id)}')" aria-label="Cantidad">
               <button class="qty-btn" onclick="changeQuoteQty('${sanitize(p.id)}', 1)" aria-label="Aumentar cantidad">+</button>
@@ -1004,22 +1036,25 @@
     document.body.style.overflow = ''; 
   };
 
+  /* ⚠️ REGLA: MENSAJE WHATSAPP PRESUPUESTO — SIN PRECIOS, CIERRE NEUTRO
+     - NO incluir precios unitarios, subtotal, abono, último pago ni total.
+       El cliente puede editar el texto antes de enviarlo y alterar cifras.
+     - Solo listar: cantidad + nombre + ID.
+     - Cerrar con "Espero su confirmación" (neutro en género). */
   window.sendQuoteWhatsApp = function() {
     if (!quoteCart.length) return;
-    let subtotal = 0, totalAdvance = 0;
-    const items = quoteCart.map(i => {
-      subtotal += i.total;
-      totalAdvance += i.advance;
-      return `• ${i.qty} x ${i.nombre} (ID: ${i.id}) - ${formatPrice(i.precioUnitario)} c/u = ${formatPrice(i.total)} | Abono (${Math.round(i.porcentaje*100)}%): ${formatPrice(i.advance)}`;
-    }).join('\n');
-    const msg = `Hola Matifina. Solicito presupuesto:\n\n${items}\n\nSubtotal: ${formatPrice(subtotal)}\nTotal Abono: ${formatPrice(totalAdvance)}\nÚltimo pago: ${formatPrice(subtotal-totalAdvance)}\nTotal: ${formatPrice(subtotal)}\n\nQuedo atento a confirmación. ✨`;
+    const items = quoteCart.map(i => `• ${i.qty} x ${i.nombre} (ID: ${i.id})`).join('\n');
+    const msg = `Hola Matifina. Solicito presupuesto para los siguientes productos:\n\n${items}\n\nEspero su confirmación. ✨`;
     window.open(`https://wa.me/${CONFIG.ws}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
+  /* NOTA: La función printQuote() SÍ conserva precios porque es un documento
+     formal de cotización (no editable por el cliente antes de enviar).
+     Aquí sí corresponde mostrar subtotal, abono, último pago y total. */
   window.printQuote = function() {
     if (!quoteCart.length) return;
-    const logoUrl = 'https://drive.google.com/thumbnail?id=1Gv-4qOhhrQTFj-sUsPhvI58kzSsnFC2c&sz=w160';
-    const faviconUrl = 'https://drive.google.com/thumbnail?id=1IKZk0fGoPdwr0DkUEUJabYK2me-Ofx5W&sz=w64';
+    const logoUrl = 'https://drive.google.com/thumbnail?id=1nmuXDLwg5HEO0mfx4Iw60iV8TIZPgbD-&sz=w300';
+    const faviconUrl = 'https://drive.google.com/thumbnail?id=1lMRrDoeEuVefuD9BCPNbOi0QUyWfaDyX&sz=w128';
     let itemsHtml = '', subtotal = 0, totalAdvance = 0;
     quoteCart.forEach(item => {
       subtotal += item.total;
@@ -1031,7 +1066,7 @@
     
     const printWindow = window.open('', '_blank', 'width=800,height=600');
     if (!printWindow) { showToast('Permite las ventanas emergentes para imprimir', 'error'); return; }
-    printWindow.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cotización Matifina</title><style>@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;700&display=swap');*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Montserrat',sans-serif;color:#5C4638;background:white;padding:0.6cm 0.6cm 0.4cm 0.6cm;position:relative;min-height:100vh;font-size:11px;}.serif{font-family:'Playfair Display',serif;}.watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.04;z-index:-1;width:180px;pointer-events:none;}.header{text-align:center;margin-bottom:15px;}.logo-title{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;}.logo-title img{height:45px;}.logo-title span{font-size:26px;font-weight:bold;font-style:italic;}.contact-info{display:flex;justify-content:center;gap:18px;font-size:10px;margin:5px 0;}h1{font-size:24px;border-bottom:2px solid #C9A66B;padding-bottom:6px;margin:12px 0 12px;}table{width:100%;border-collapse:collapse;margin:12px 0 8px;font-size:11px;page-break-inside:avoid;}th,td{padding:7px 5px;text-align:left;border-bottom:1px solid #ddd;}th{background-color:#F8F1E9;font-weight:700;}.totals{text-align:right;margin-top:15px;page-break-inside:avoid;}.totals p{margin:3px 0;}.footer{margin-top:20px;font-size:9px;text-align:center;color:#666;border-top:1px solid #E0D6C8;padding-top:10px;page-break-inside:avoid;}.no-print{text-align:center;margin-top:12px;}@media print{body{padding:0.4cm;}.no-print{display:none!important;}.watermark{opacity:0.03;}}</style></head><body><img src="${faviconUrl}" class="watermark" alt=""><div class="header"><div class="logo-title"><img src="${logoUrl}" alt="Matifina"><span class="serif">MatiFina</span></div><div class="contact-info"><span>+56 9 3383 7626</span><span>@mati.fina</span><span>/matifina</span></div><h1 class="serif">Cotización</h1></div><table><thead><tr><th>Producto</th><th>Cant.</th><th>P. Unit.</th><th>Total</th><th>Abono %</th><th>Abono</th></tr></thead><tbody>${itemsHtml}</tbody></table><div class="totals"><p><strong>Subtotal productos:</strong> ${formatPrice(subtotal)}</p><p><strong>Total Abono:</strong> ${formatPrice(totalAdvance)}</p><p><strong>Último pago:</strong> ${formatPrice(lastPayment)}</p><p style="font-size:1.2em;"><strong>Total:</strong> ${formatPrice(subtotal)}</p></div><div class="footer"><p>Cotización válida por 5 días hábiles, sujeta a confirmación de stock y acuerdo previo con el proveedor.</p><p>Fecha de emisión: ${fechaChile}</p><p>Matifina · Souvenirs con alma</p></div><div class="no-print"><button onclick="window.print()" style="padding:8px 20px;background:#5C4638;color:white;border:none;border-radius:30px;font-weight:bold;cursor:pointer;font-size:11px;">Imprimir / Guardar PDF</button></div></body></html>`);
+    printWindow.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cotización Matifina</title><style>@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;700&display=swap');*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Montserrat',sans-serif;color:#3D2415;background:white;padding:0.6cm 0.6cm 0.4cm 0.6cm;position:relative;min-height:100vh;font-size:11px;}.serif{font-family:'Playfair Display',serif;}.watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.05;z-index:-1;width:180px;pointer-events:none;}.header{text-align:center;margin-bottom:15px;}.logo-title{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;}.logo-title img{height:55px;}.contact-info{display:flex;justify-content:center;gap:18px;font-size:10px;margin:5px 0;}h1{font-size:24px;border-bottom:2px solid #A66A42;padding-bottom:6px;margin:12px 0 12px;color:#3D2415;}table{width:100%;border-collapse:collapse;margin:12px 0 8px;font-size:11px;page-break-inside:avoid;}th,td{padding:7px 5px;text-align:left;border-bottom:1px solid #E8DDD0;}th{background-color:#F3EAE1;font-weight:700;color:#3D2415;}.totals{text-align:right;margin-top:15px;page-break-inside:avoid;}.totals p{margin:3px 0;}.footer{margin-top:20px;font-size:9px;text-align:center;color:#6B7A46;border-top:1px solid #E8DDD0;padding-top:10px;page-break-inside:avoid;}.no-print{text-align:center;margin-top:12px;}@media print{body{padding:0.4cm;}.no-print{display:none!important;}.watermark{opacity:0.04;}}</style></head><body><img src="${faviconUrl}" class="watermark" alt=""><div class="header"><div class="logo-title"><img src="${logoUrl}" alt="Matifina"></div><div class="contact-info"><span>+56 9 5796 1176</span><span>@mati.fina</span><span>/matifina</span></div><h1 class="serif">Cotización</h1></div><table><thead><tr><th>Producto</th><th>Cant.</th><th>P. Unit.</th><th>Total</th><th>Abono %</th><th>Abono</th></tr></thead><tbody>${itemsHtml}</tbody></table><div class="totals"><p><strong>Subtotal productos:</strong> ${formatPrice(subtotal)}</p><p><strong>Total Abono:</strong> ${formatPrice(totalAdvance)}</p><p><strong>Último pago:</strong> ${formatPrice(lastPayment)}</p><p style="font-size:1.2em;"><strong>Total:</strong> ${formatPrice(subtotal)}</p></div><div class="footer"><p>Cotización válida por 5 días hábiles, sujeta a confirmación de stock y acuerdo previo con el proveedor.</p><p>Fecha de emisión: ${fechaChile}</p><p>Matifina · Souvenirs con alma</p></div><div class="no-print"><button onclick="window.print()" style="padding:8px 20px;background:#A66A42;color:white;border:none;border-radius:30px;font-weight:bold;cursor:pointer;font-size:11px;">Imprimir / Guardar PDF</button></div></body></html>`);
     printWindow.document.close();
   };
 
